@@ -11,8 +11,8 @@ using System;
 namespace Pgs.Kanban.Domain.Migrations
 {
     [DbContext(typeof(KanbanContext))]
-    [Migration("20180314185922_Init")]
-    partial class Init
+    [Migration("20180509150325_myNewMigration")]
+    partial class myNewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,22 @@ namespace Pgs.Kanban.Domain.Migrations
                     b.ToTable("Boards");
                 });
 
+            modelBuilder.Entity("Pgs.Kanban.Domain.Models.Card", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ListId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ListId");
+
+                    b.ToTable("Cards");
+                });
+
             modelBuilder.Entity("Pgs.Kanban.Domain.Models.List", b =>
                 {
                     b.Property<int>("Id")
@@ -49,6 +65,14 @@ namespace Pgs.Kanban.Domain.Migrations
                     b.HasIndex("BoardId");
 
                     b.ToTable("Lists");
+                });
+
+            modelBuilder.Entity("Pgs.Kanban.Domain.Models.Card", b =>
+                {
+                    b.HasOne("Pgs.Kanban.Domain.Models.List", "List")
+                        .WithMany("Cards")
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Pgs.Kanban.Domain.Models.List", b =>

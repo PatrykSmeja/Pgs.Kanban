@@ -42,5 +42,23 @@ namespace Pgs.Kanban.Api.Controllers
             var result = _boardService.CreateBoard(createBoardDto);
             return Ok(result);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult EditBoard([FromBody] EditBoardNameDto editBoardNameDto, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = _boardService.EditBoard(editBoardNameDto, id);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return NoContent();
+        }
     }
 }

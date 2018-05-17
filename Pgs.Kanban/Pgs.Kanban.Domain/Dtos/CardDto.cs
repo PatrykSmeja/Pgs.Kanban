@@ -4,11 +4,14 @@ using System.Text;
 
 namespace Pgs.Kanban.Domain.Dtos
 {
-    public class ListDto
+    public class CardDto
     {
         public int Id { get; set; }
+
+        public int ListId { get; set; }
+
         public string Name { get; set; }
-        public int BoardId { get; set; }
-        public List<CardDto> Cards { get; set; }
+
+        public string Description { get; set; }
     }
 }

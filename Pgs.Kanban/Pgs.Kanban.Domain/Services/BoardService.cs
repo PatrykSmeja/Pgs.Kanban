@@ -21,6 +21,7 @@ namespace Pgs.Kanban.Domain.Services
         {
             var board = _context.Boards
                 .Include(b => b.Lists)
+                .ThenInclude(c => c.Cards)
                 .LastOrDefault();
 
             if (board == null)
@@ -36,7 +37,13 @@ namespace Pgs.Kanban.Domain.Services
                 {
                     Id = l.Id,
                     BoardId = l.BoardId,
-                    Name = l.Name
+                    Name = l.Name,
+                    Cards = l.Cards.Select(c => new CardDto()
+                    {
+                        Id = c.Id,
+                        ListId = c.ListId,
+                        Name = c.Name
+                    }).ToList()
                 }).ToList()
             };
 
@@ -53,13 +60,37 @@ namespace Pgs.Kanban.Domain.Services
             _context.Boards.Add(board);
             _context.SaveChanges();
 
-            var boardDto = new BoardDto()
+            return ConstructBoardDto(board);
+        }
+
+        public bool EditBoard(EditBoardNameDto editBoardNameDto, int id)
+        {
+            var board = GetBoardById(id);
+            if (board == null)
+            {
+                return false;
+            }
+
+            if (board.Name == editBoardNameDto.Name)
+            {
+                return true;
+            }
+            board.Name = editBoardNameDto.Name;
+            return _context.SaveChanges() > 0;
+        }
+
+        private BoardDto ConstructBoardDto(Board board)
+        {
+            return new BoardDto()
             {
                 Id = board.Id,
                 Name = board.Name
             };
+        }
 
-            return boardDto;
+        private Board GetBoardById(int id)
+        {
+            return _context.Boards.SingleOrDefault(x => x.Id == id);
         }
     }
 }

@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Pgs.Kanban.Domain.Models
+namespace Pgs.Kanban.Domain.Dtos
 {
-    public class List
+    public class EditListDto
     {
-        [Key]
-        public int Id { get; set; }
-
+        [Required]
         public int BoardId { get; set; }
-
-        public virtual Board Board { get; set; }
-
         [Required]
         public string Name { get; set; }
-        public ICollection<Card> Cards { get; set; }
     }
 }

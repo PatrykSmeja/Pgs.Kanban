@@ -5,17 +5,15 @@ using System.Text;
 
 namespace Pgs.Kanban.Domain.Models
 {
-    public class List
+    public class Card
     {
         [Key]
         public int Id { get; set; }
 
-        public int BoardId { get; set; }
+        public int ListId { get; set; }
 
-        public virtual Board Board { get; set; }
+        public virtual List List { get; set; }
 
-        [Required]
         public string Name { get; set; }
-        public ICollection<Card> Cards { get; set; }
     }
 }
